@@ -5,30 +5,36 @@ import {
   StyledAddTransactionInput,
   StyledAddTransactionLabel,
   StyledAddTransactionTitle,
+  StyledErrorText,
 } from "./AddTransaction.styled";
 import { GlobalContext } from "../../context/GlobalState";
 
 const AddTransaction = () => {
   const { addTransaction } = useContext(GlobalContext);
   const [text, setText] = useState("");
-  const [amount, setAmount] = useState("0");
+  const [amount, setAmount] = useState("");
+  const [error, setError] = useState("");
 
-  const handleText = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleText = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
+    if (error) setError("");
+  };
 
-  const handleAmount = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleAmount = (e: ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
+    if (error) setError("");
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text || !amount) {
-      alert("Please fill all fields");
+      setError("Please fill in both text and amount fields");
       return;
     }
 
     const numberAmount = parseInt(amount);
     if (isNaN(numberAmount)) {
-      alert("Please enter a valid amount");
+      setError("Please enter a valid amount");
       return;
     }
     const newTransaction = {
@@ -39,7 +45,7 @@ const AddTransaction = () => {
 
     addTransaction(newTransaction);
     setText("");
-    setAmount("0");
+    setAmount("");
   };
 
   return (
@@ -56,11 +62,13 @@ const AddTransaction = () => {
             value={text}
             placeholder="Enter text..."
             onChange={handleText}
+            aria-invalid={!!error}
           />
         </div>
         <div>
           <StyledAddTransactionLabel htmlFor="amount">
-            Amount <br /> (negative - expense, positive - income)
+            Amount <br />
+            <small>(negative - expense, positive - income)</small>
           </StyledAddTransactionLabel>
           <StyledAddTransactionInput
             type="number"
@@ -68,9 +76,15 @@ const AddTransaction = () => {
             value={amount}
             placeholder="Enter amount..."
             onChange={handleAmount}
+            aria-invalid={!!error}
           />
         </div>
-        <StyledAddTransactionButton>Add transaction</StyledAddTransactionButton>
+        {error && <StyledErrorText>{error}</StyledErrorText>}
+        <StyledAddTransactionButton
+          type="submit"
+          disabled={!text || !amount || !!error}>
+          Add Transaction
+        </StyledAddTransactionButton>
       </form>
     </>
   );

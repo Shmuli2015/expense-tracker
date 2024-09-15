@@ -21,6 +21,13 @@ export const StyledAddTransactionInput = styled.input`
   width: 100%;
 `
 
+export const StyledErrorText = styled.p`
+  color: red;
+  font-size: 0.9em;
+  margin-top: -10px;
+  margin-bottom: 10px;
+`;
+
 export const StyledAddTransactionButton = styled.button`
   cursor: pointer;
   background-color: #9c88ff;
@@ -35,5 +42,10 @@ export const StyledAddTransactionButton = styled.button`
 
   &:focus {
     outline: 0;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `
