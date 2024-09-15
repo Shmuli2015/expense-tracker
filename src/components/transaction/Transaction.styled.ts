@@ -19,7 +19,7 @@ export const StyledTransactionListDeleteBtn = styled.button`
   }
 `
 
-export const StyledTransactionListItem = styled.li`
+export const StyledTransactionListItem = styled.li<{ isIncome: boolean }>`
   background-color: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   color: #333;
@@ -28,8 +28,7 @@ export const StyledTransactionListItem = styled.li`
   position: relative;
   padding: 10px;
   margin: 10px 0;
-  border-right-width: 5px;
-  border-right-style: solid;
+  border-right: 5px solid ${({ isIncome }) => (isIncome ? "#2ecc71" : "#c0392b")};
 
   &:hover ${StyledTransactionListDeleteBtn} {
     opacity: 1;

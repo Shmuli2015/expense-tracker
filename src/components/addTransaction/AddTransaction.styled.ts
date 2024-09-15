@@ -28,6 +28,37 @@ export const StyledErrorText = styled.p`
   margin-bottom: 10px;
 `;
 
+export const StyledTransactionTypeContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+`;
+
+export const StyledTransactionTypeButton = styled.button<{ active: boolean }>`
+  background-color: ${({ active }) => (active ? "#28a745" : "#f8f9fa")};
+  color: ${({ active }) => (active ? "#fff" : "#000")};
+  border: 2px solid ${({ active }) => (active ? "#28a745" : "#ddd")};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  width: 48%;
+  
+  &:hover {
+    background-color: ${({ active }) => (active ? "#218838" : "#e2e6ea")};
+  }
+
+  .symbol {
+    font-size: 20px;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+`;
+
 export const StyledAddTransactionButton = styled.button`
   cursor: pointer;
   background-color: #9c88ff;

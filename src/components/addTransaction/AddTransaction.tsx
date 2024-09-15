@@ -6,6 +6,8 @@ import {
   StyledAddTransactionLabel,
   StyledAddTransactionTitle,
   StyledErrorText,
+  StyledTransactionTypeButton,
+  StyledTransactionTypeContainer,
 } from "./AddTransaction.styled";
 import { GlobalContext } from "../../context/GlobalState";
 
@@ -13,6 +15,9 @@ const AddTransaction = () => {
   const { addTransaction } = useContext(GlobalContext);
   const [text, setText] = useState("");
   const [amount, setAmount] = useState("");
+  const [transactionType, setTransactionType] = useState<
+    "income" | "expense" | ""
+  >("");
   const [error, setError] = useState("");
 
   const handleText = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,8 +32,8 @@ const AddTransaction = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!text || !amount) {
-      setError("Please fill in both text and amount fields");
+    if (!text || !amount || !transactionType) {
+      setError("Please fill in all fields and select a transaction type");
       return;
     }
 
@@ -37,15 +42,20 @@ const AddTransaction = () => {
       setError("Please enter a valid amount");
       return;
     }
+
+    const signedAmount =
+      transactionType === "expense" ? -numberAmount : numberAmount;
+
     const newTransaction = {
       id: uuidv4(),
       text,
-      amount: numberAmount,
+      amount: signedAmount,
     };
 
     addTransaction(newTransaction);
     setText("");
     setAmount("");
+    setTransactionType("");
   };
 
   return (
@@ -67,8 +77,7 @@ const AddTransaction = () => {
         </div>
         <div>
           <StyledAddTransactionLabel htmlFor="amount">
-            Amount <br />
-            <small>(negative - expense, positive - income)</small>
+            Amount
           </StyledAddTransactionLabel>
           <StyledAddTransactionInput
             type="number"
@@ -79,10 +88,27 @@ const AddTransaction = () => {
             aria-invalid={!!error}
           />
         </div>
+        <StyledTransactionTypeContainer>
+          <StyledTransactionTypeButton
+            type="button"
+            onClick={() => setTransactionType("income")}
+            active={transactionType === "income"}
+          >
+            <span className="symbol">+</span> Income
+          </StyledTransactionTypeButton>
+          <StyledTransactionTypeButton
+            type="button"
+            onClick={() => setTransactionType("expense")}
+            active={transactionType === "expense"}
+          >
+            <span className="symbol">−</span> Expense
+          </StyledTransactionTypeButton>
+        </StyledTransactionTypeContainer>
         {error && <StyledErrorText>{error}</StyledErrorText>}
         <StyledAddTransactionButton
           type="submit"
-          disabled={!text || !amount || !!error}>
+          disabled={!text || !amount || !!error}
+        >
           Add Transaction
         </StyledAddTransactionButton>
       </form>

@@ -18,10 +18,9 @@ const Transaction = ({ transaction }: TransactionProps) => {
 
   const isIncome = amount > 0;
   const sign = isIncome ? "+" : "-";
-  const borderColor = isIncome ? "#2ecc71" : "#c0392b";
 
   return (
-    <StyledTransactionListItem style={{ borderRightColor: borderColor }}>
+    <StyledTransactionListItem isIncome={isIncome}>
       {text}
       <span>
         {sign}${Math.abs(amount)}
